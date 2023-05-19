@@ -140,6 +140,9 @@ ENV/
 env.bak/
 venv.bak/
 secrets.json
+.vscode
+**/migrations/**.py
+!**/migrations/_init_.py
 
 # Spyder project settings
 .spyderproject
