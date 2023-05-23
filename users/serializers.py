@@ -2,6 +2,7 @@ from dataclasses import field
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from users.models import User
+from articles.serializers import ProductSerializer, WishListSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -31,3 +32,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
 
         return token
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    # review_set = ReviewListSerializer(many= True) 내가쓴 리뷰 불러오기 추후 수정
+    wishes = WishListSerializer(many= True)  # 찜한 상품 불러오기
+
+
+    class Meta:
+        model = User
+        fields = ("id", "email", "wishes",)

@@ -6,8 +6,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView
 )
 
-from users.serializers import CustomTokenObtainPairSerializer, UserSerializer
-
+from users.serializers import CustomTokenObtainPairSerializer, UserSerializer, UserProfileSerializer
+from rest_framework.generics import get_object_or_404
+from users.models import User
 
 class UserView(APIView):
     def post(self, request):
@@ -42,3 +43,13 @@ class UserDetailView(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):   #이게 로그인 기능이라서, 로그인 코드를 쓸 필요가 없었다는 것.
     serializer_class = CustomTokenObtainPairSerializer
+
+
+# 마이페이지
+class ProfileView(APIView):
+    def get(self,request, pk):
+        user = get_object_or_404(User, id=pk)
+        serializer = UserProfileSerializer(user)
+
+
+        return Response(serializer.data)
