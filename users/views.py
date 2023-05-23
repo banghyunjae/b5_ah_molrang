@@ -10,6 +10,7 @@ from users.serializers import CustomTokenObtainPairSerializer, UserSerializer, U
 from rest_framework.generics import get_object_or_404
 from users.models import User
 
+# 회원가입POST
 class UserView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -19,6 +20,7 @@ class UserView(APIView):
         else:
             return Response({"message":f"{serializer.errors}"}, status=status.HTTP_400_BAD_REQUEST)
 
+# 회원상세보기GET /회원정보수정PUT /회원탈퇴DELETE
 class UserDetailView(APIView):
     def get(self, request):
         return Response(UserSerializer(request.user).data)
@@ -41,6 +43,7 @@ class UserDetailView(APIView):
         user.save()
         return Response({'message': '삭제완료'})
 
+# 회원로그인(JWT획득)
 class CustomTokenObtainPairView(TokenObtainPairView):   #이게 로그인 기능이라서, 로그인 코드를 쓸 필요가 없었다는 것.
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -53,3 +56,6 @@ class ProfileView(APIView):
 
 
         return Response(serializer.data)
+    
+
+# 구글 로그인
