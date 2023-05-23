@@ -3,11 +3,11 @@ from django.core.exceptions import ValidationError
 
 
 class Product(models.Model):
-    user = models.IntegerField # 임시유저
+    user = models.IntegerField("임시유저") # 임시유저
     product = models.CharField("상품명", max_length=30)
     content = models.TextField("내용")
     price = models.PositiveIntegerField("가격")
-    image = models.ImageField("사진", blank=True)
+    image = models.ImageField("사진", blank=True, null=True)
     total_quantity = models.PositiveIntegerField("총수량")
     # inbound_quantity = models.PositiveIntegerField("입고량") # 필드에 넣을지 말지 고민중입니다.
     # order_quantity = models.PositiveIntegerField("주문량") # 필드에 넣을지 말지 고민중입니다.
@@ -19,8 +19,13 @@ class Product(models.Model):
         return str(self.product)
     
     def save(self, **kwargs):
+        if self.total_quantity is None:
+            self.total_quantity = 0  # 기본값으로 0 설정 또는 다른 유효한 값으로 대체
+        
         if self.total_quantity < 0:
             raise ValidationError("총수량이 0보다 작을 수 없습니다.")
+        
         if self.total_quantity <= 0:
             self.inventory_status = False
+        
         super().save(**kwargs)
