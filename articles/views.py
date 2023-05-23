@@ -2,14 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from articles.models import Product
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
+from articles.permissions import IsAdminOrReadOnly
 from articles.serializers import ProductSerializer, ProductCreateSerializer
 from django.shortcuts import get_object_or_404
 
 
 # 상품목록과 작성 - 아직 권한 설정은 안했어요
 class ProductView(APIView):
-    # permission_classes = [IsAdminUser | IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
     # 상품 목록
     def get(self, request):
         products = Product.objects.all().order_by('-created_at')
@@ -20,7 +20,7 @@ class ProductView(APIView):
     def post(self, request):
         serializer = ProductCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            serializer.save(writer=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -28,7 +28,7 @@ class ProductView(APIView):
 
 # 상품 상페페이지 보기, 수정, 삭제 - 아직 권한 설정은 안했어요        
 class ProductDetailView(APIView):
-    # permission_classes = [IsAdminUser | IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
     # 상품 상세페이지
     def get(self, request, id_product):
         product = get_object_or_404(Product, id=id_product)
@@ -38,10 +38,8 @@ class ProductDetailView(APIView):
     # 수정하기
     def put(self, request, id_product):
         product = get_object_or_404(Product, id=id_product)
-        print("1",request.user)
-        print("2",product.user)
         # 본인이 작성한 글이 맞다면
-        if 5 == product.user: # request.user가 AnonymousUser로 떠서 임시로 이렇게 작성했어요
+        if request.user == product.writer:
             serializer = ProductCreateSerializer(product, data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -55,9 +53,8 @@ class ProductDetailView(APIView):
     #삭제하기
     def delete(self, request, id_product):
         product = get_object_or_404(Product, id=id_product)
-        print(product.user)
         # 본인이 작성한 글이 맞다면
-        if 1 == product.user: # request.user가 AnonymousUser로 떠서 임시로 이렇게 작성했어요
+        if request.user == product.writer:
             product.delete()
             return Response({'message':'게시글이 삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
         # 본인의 게시글이 아니라면
