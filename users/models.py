@@ -3,32 +3,30 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, date_of_birth, password=None):
+    def create_user(self, email, username, password=None):
         """
-        Creates and saves a User with the given email, date of
-        birth and password.
+        요청 받은 이메일, 회원아이디, 비밀번호로 유저를 생성하여 저장합니다.
         """
         if not email:
             raise ValueError("Users must have an email address")
 
         user = self.model(
             email=self.normalize_email(email),
-            date_of_birth=date_of_birth,
+            username=username,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, date_of_birth, password=None):
+    def create_superuser(self, email, username, password=None):
         """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
+        요청받은 이메일, 회원아이디, 비밀번호로 수퍼유저를 생성하여 저장합니다.
         """
         user = self.create_user(
             email,
+            username=username,
             password=password,
-            date_of_birth=date_of_birth,
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -41,14 +39,14 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    date_of_birth = models.DateField()
+    username = models.CharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["date_of_birth"]
+    USERNAME_FIELD = "username" #이걸로 로그인 하겠다 하는 필드. unique=True 속성이어야 함.
+    REQUIRED_FIELDS = [] #createsuperuser할때 어떤 필드들을 작성받을 지 적는 필드다.
 
     def __str__(self):
         return self.email
