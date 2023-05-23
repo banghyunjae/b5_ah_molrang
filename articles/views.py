@@ -61,6 +61,7 @@ class ProductDetailView(APIView):
         # 본인의 게시글이 아니라면
         else:
             return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+
         
 
 class ReviewView(APIView):
@@ -103,3 +104,17 @@ class ReviewDetailView(APIView):
             return Response({'message':'삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'message': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+
+
+
+class WishView(APIView):
+    def post(self, request, id_product):
+        product = get_object_or_404(Product, id=id_product)
+        if request.user in product.wishes.all():
+            product.wishes.remove(request.user)
+            return Response("찜취소했습니다.", status=status.HTTP_200_OK)
+
+        else:
+            product.wishes.add(request.user)
+            return Response("찜했습니다.", status=status.HTTP_200_OK)
+

@@ -33,9 +33,18 @@ class ProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('product', 'content', 'price',"writer", 'image', 'total_quantity')
-        
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'product', 'writer', 'title', 'content', 'rating', 'created_at', 'updated_at']
+
+
+class WishListSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source='writer.username')
+
+    class Meta:
+        model = Product
+        fields = ("product", "image", "writer", "updated_at", "price",)
+

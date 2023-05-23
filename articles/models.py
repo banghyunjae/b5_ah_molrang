@@ -15,7 +15,8 @@ class Product(models.Model):
     inventory_status = models.BooleanField("재고유무", default=True) # 품절이면 False
     created_at = models.DateTimeField("생성 시간", auto_now_add=True)
     updated_at = models.DateTimeField("수정 시간", auto_now=True)
-    
+    wishes = models.ManyToManyField(User, related_name='wishes') 
+
     def __str__(self):
         return str(self.product)
     
