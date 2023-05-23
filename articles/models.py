@@ -1,9 +1,10 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from users.models import User
 
 
 class Product(models.Model):
-    user = models.IntegerField("임시유저") # 임시유저
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.CharField("상품명", max_length=30)
     content = models.TextField("내용")
     price = models.PositiveIntegerField("가격")
