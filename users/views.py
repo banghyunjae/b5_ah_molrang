@@ -57,5 +57,3 @@ class ProfileView(APIView):
 
         return Response(serializer.data)
     
-
-# 구글 로그인
