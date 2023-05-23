@@ -7,7 +7,7 @@ from articles.serializers import ProductSerializer, ProductCreateSerializer
 from django.shortcuts import get_object_or_404
 
 
-# 상품목록과 작성 - 아직 권한 설정은 안했어요
+# 상품목록과 작성
 class ProductView(APIView):
     permission_classes = [IsAdminOrReadOnly]
     # 상품 목록
@@ -26,7 +26,7 @@ class ProductView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
-# 상품 상페페이지 보기, 수정, 삭제 - 아직 권한 설정은 안했어요        
+# 상품 상페페이지 보기, 수정, 삭제      
 class ProductDetailView(APIView):
     permission_classes = [IsAdminOrReadOnly]
     # 상품 상세페이지
