@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from articles.models import Product
+from articles.models import Product, Review
 from rest_framework import status
 from articles.permissions import IsAdminOrReadOnly
-from articles.serializers import ProductSerializer, ProductCreateSerializer
+from articles.serializers import ProductSerializer, ProductCreateSerializer, ReviewSerializer
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 
 
@@ -60,3 +61,45 @@ class ProductDetailView(APIView):
         # 본인의 게시글이 아니라면
         else:
             return Response({'message':'권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        
+
+class ReviewView(APIView):
+    def get(self, request, id_product):
+        reviews = Review.objects.filter(product_id=id_product)
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        paginated_reviews = paginator.paginate_queryset(reviews, request)
+        serializer = ReviewSerializer(paginated_reviews, many=True)
+        return paginator.get_paginated_response(serializer.data)
+    
+    # 등록
+    def post(self, request, id_product):
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(product_id=id_product)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ReviewDetailView(APIView):
+    # 수정
+    def put(self, request, id_product, id_review):
+        review = get_object_or_404(Review, id=id_review, product_id=id_product)
+        
+        if request.user == review.writer:
+            serializer = ReviewSerializer(review, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+    # 삭제
+    def delete(self, request, id_product, id_review):
+        review = get_object_or_404(Review, id=id_review, product_id=id_product)
+        
+        if request.user == review.writer:
+            review.delete()
+            return Response({'message':'삭제되었습니다.'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'message': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)

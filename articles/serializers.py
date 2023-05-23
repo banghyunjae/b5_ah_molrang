@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from articles.models import Product
+from articles.models import Product, Review
 
 class ProductSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
@@ -34,3 +34,8 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('product', 'content', 'price',"writer", 'image', 'total_quantity')
         
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'product', 'writer', 'title', 'content', 'rating', 'created_at', 'updated_at']
