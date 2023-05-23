@@ -41,7 +41,7 @@ class ProductDetailView(APIView):
         print("1",request.user)
         print("2",product.user)
         # 본인이 작성한 글이 맞다면
-        if 1 == product.user: # request.user가 AnonymousUser로 떠서 임시로 이렇게 작성했어요
+        if 5 == product.user: # request.user가 AnonymousUser로 떠서 임시로 이렇게 작성했어요
             serializer = ProductCreateSerializer(product, data=request.data)
             if serializer.is_valid():
                 serializer.save()

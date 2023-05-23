@@ -3,12 +3,12 @@ from django.core.exceptions import ValidationError
 
 
 class Product(models.Model):
-    user = models.IntegerField() # 임시유저
+    user = models.IntegerField("임시유저") # 임시유저
     product = models.CharField("상품명", max_length=30)
     content = models.TextField("내용")
-    price = models.IntegerField("가격")
+    price = models.PositiveIntegerField("가격")
     image = models.ImageField("사진", blank=True, null=True)
-    total_quantity = models.IntegerField("총수량")
+    total_quantity = models.PositiveIntegerField("총수량")
     # inbound_quantity = models.PositiveIntegerField("입고량") # 필드에 넣을지 말지 고민중입니다.
     # order_quantity = models.PositiveIntegerField("주문량") # 필드에 넣을지 말지 고민중입니다.
     inventory_status = models.BooleanField("재고유무", default=True) # 품절이면 False
