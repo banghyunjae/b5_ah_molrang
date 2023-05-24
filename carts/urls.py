@@ -1,10 +1,11 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-from .views import CartViewSet
+from django.urls import path
+from .views import CartListAPIView, CartDetailAPIView, CartItemDetailAPIView
 
-router = DefaultRouter()
-router.register('', CartViewSet, basename='carts')
+app_name = 'carts'
 
 urlpatterns = [
-    path('carts/', include(router.urls)),  # 127.0.0.1:8000/carts/ 로 접속
+    path('', CartListAPIView.as_view(), name='cart-list'),
+    path('<int:pk>/', CartDetailAPIView.as_view(), name='cart-detail'),
+    path('items/<int:pk>/', CartItemDetailAPIView.as_view(),
+         name='cart-item-detail'),
 ]
