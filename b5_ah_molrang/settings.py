@@ -42,6 +42,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -54,6 +55,17 @@ INSTALLED_APPS = [
     'articles',
     'users',
     'carts',
+
+
+    #소셜로그인 위한 allauth 패키지에 딸린 코드
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    #provider 소셜로그인을 제공해주는 업체들
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.kakao',
+
 
 
 ]
@@ -196,6 +208,24 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
+#커스텀 유저 모델을 사용하기 위해 auth를 users.User로 바꾸었다.
 AUTH_USER_MODEL = "users.User"
 
+
+#소셜로그인 위한 allauth 패키지 사용시 필요한 튜플
+AUTHENTICATION_BACKENDS = (
+    #Needed to Login by username in Django admin, regardeless of 'allauth'
+    'django.contrib.auth.backends.ModelBackend',
+
+    #'allauth' specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+#소셜로그인 시에 여러가지 설정들(사이트아이디, 알러트없이곧바로로그인팝업, 로그인후리다이렉트, 로그아웃후리다이렉트, 알러트없이곧바로로그아웃)
+SITE_ID = 1
+ACCOUNT_LOGIN_ON_GET = True
+LOGIN_REDIRECT_URL = 'carts/'
+ACCOUNT_LOGOUT_REDIRECT_URL = ''
+ACCOUNT_LOGOUT_ON_GET = True
 CORS_ALLOW_ALL_ORIGINS = True
+
