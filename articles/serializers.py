@@ -71,3 +71,10 @@ class WishListSerializer(serializers.ModelSerializer):
             "updated_at",
             "price",
         )
+
+class ReviewListSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source='writer.username')
+
+    class Meta:
+        model = Review
+        fields = ("product", "title", "writer", "content", "updated_at",)
