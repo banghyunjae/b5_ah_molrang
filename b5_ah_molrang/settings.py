@@ -49,10 +49,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-
+    'allauth',
+    'allauth.account',
+    'corsheaders',
     'articles',
     'users',
     'carts',
+
 
     #소셜로그인 위한 allauth 패키지에 딸린 코드
     'allauth',
@@ -62,6 +65,7 @@ INSTALLED_APPS = [
     #provider 소셜로그인을 제공해주는 업체들
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.kakao',
+
 
 
 ]
@@ -74,6 +78,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -206,6 +211,7 @@ MEDIA_URL = '/media/'
 #커스텀 유저 모델을 사용하기 위해 auth를 users.User로 바꾸었다.
 AUTH_USER_MODEL = "users.User"
 
+
 #소셜로그인 위한 allauth 패키지 사용시 필요한 튜플
 AUTHENTICATION_BACKENDS = (
     #Needed to Login by username in Django admin, regardeless of 'allauth'
@@ -221,3 +227,5 @@ ACCOUNT_LOGIN_ON_GET = True
 LOGIN_REDIRECT_URL = 'carts/'
 ACCOUNT_LOGOUT_REDIRECT_URL = ''
 ACCOUNT_LOGOUT_ON_GET = True
+CORS_ALLOW_ALL_ORIGINS = True
+
