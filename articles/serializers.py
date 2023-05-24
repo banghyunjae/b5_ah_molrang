@@ -35,7 +35,8 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("product", "content", "price", "writer", "image", "total_quantity")
+        fields = ("product", "content", "price",
+                  "writer", "image", "total_quantity")
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -71,6 +72,7 @@ class WishListSerializer(serializers.ModelSerializer):
             "updated_at",
             "price",
         )
+
 
 class ReviewListSerializer(serializers.ModelSerializer):
     writer = serializers.ReadOnlyField(source='writer.username')
