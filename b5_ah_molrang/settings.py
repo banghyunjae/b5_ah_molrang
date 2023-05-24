@@ -48,10 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-
+    'allauth',
+    'allauth.account',
+    'corsheaders',
     'articles',
     'users',
     'carts',
+
+
 ]
 
 REST_FRAMEWORK = {
@@ -62,6 +66,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -192,3 +197,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = "users.User"
+
+CORS_ALLOW_ALL_ORIGINS = True
