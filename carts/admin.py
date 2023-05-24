@@ -10,17 +10,19 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
     list_display = ['cart', 'quantity', 'selected',
-                    'product_title', 'product_image', 'total_price']
+                    'get_product_title', 'get_product_image', 'total_price']
 
-    def product_title(self, obj):
-        return obj.product.title
+    def get_product_title(self, obj):
+        return obj.product.product
 
-    def product_image(self, obj):
-        return obj.product.image.url
+    def get_product_image(self, obj):
+        if obj.product.image:
+            return obj.product.image.url
+        return None
 
     def total_price(self, obj):
         return obj.total_price
 
-    product_title.short_description = 'Product Title'
-    product_image.short_description = 'Product Image'
+    get_product_title.short_description = 'Product Title'
+    get_product_image.short_description = 'Product Image'
     total_price.short_description = 'Total Price'
