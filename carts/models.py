@@ -31,4 +31,4 @@ class CartItem(models.Model):
 
     @property
     def product_title(self):
-        return self.product.title
+        return self.product.product
