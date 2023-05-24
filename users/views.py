@@ -47,7 +47,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):   #이게 로그인 기능
 
 # 마이페이지
 class ProfileView(APIView):
-    def get(self,request, pk):
+    def get(self, request, pk):
         user = get_object_or_404(User, id=pk)
         serializer = UserProfileSerializer(user)
 
