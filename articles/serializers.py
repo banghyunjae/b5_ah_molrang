@@ -7,6 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     updated_at = serializers.SerializerMethodField()
     inventory_status = serializers.SerializerMethodField()
     writer = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     def get_created_at(self, obj):
         return obj.created_at.strftime("%Y년 %m월 %d일 %p %I:%M")
@@ -16,14 +17,15 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_inventory_status(self, obj):
         if obj.inventory_status == True:
-            if obj.total_quantity <= 5:
-                return f"수량이 얼마 없어요! 남은 수량 : {obj.total_quantity}"
             return f"남은 수량 : {obj.total_quantity}"
         else:
             return "Sold Out"
 
     def get_writer(self, obj):
         return obj.writer.username
+
+    def get_price(self, obj):
+        return f"₩{obj.price}"
 
     class Meta:
         model = Product
@@ -35,7 +37,8 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("product", "content", "price", "writer", "image", "total_quantity")
+        fields = ("product", "content", "price",
+                  "writer", "image", "total_quantity")
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -71,6 +74,7 @@ class WishListSerializer(serializers.ModelSerializer):
             "updated_at",
             "price",
         )
+
 
 class ReviewListSerializer(serializers.ModelSerializer):
     writer = serializers.ReadOnlyField(source='writer.username')

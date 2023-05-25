@@ -33,7 +33,7 @@ class ProductView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 상품 상페페이지 보기, 수정, 삭제      
+# 상품 상페페이지 보기, 수정, 삭제
 class ProductDetailView(APIView):
     permission_classes = [IsAdminOrReadOnly]
 
