@@ -16,8 +16,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_inventory_status(self, obj):
         if obj.inventory_status == True:
-            if obj.total_quantity <= 5:
-                return f"수량이 얼마 없어요! 남은 수량 : {obj.total_quantity}"
             return f"남은 수량 : {obj.total_quantity}"
         else:
             return "Sold Out"
