@@ -13,7 +13,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 
 
-# 상품목록과 작성
+# 상품목록과 작성 - 아직 권한 설정은 안했어요
 class ProductView(APIView):
     permission_classes = [IsAdminOrReadOnly]
 
@@ -34,7 +34,7 @@ class ProductView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 상품 상페페이지 보기, 수정, 삭제
+# 상품 상페페이지 보기, 수정, 삭제 - 아직 권한 설정은 안했어요
 class ProductDetailView(APIView):
     permission_classes = [IsAdminOrReadOnly]
 
