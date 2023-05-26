@@ -219,10 +219,19 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+
+
 # 소셜로그인 시에 여러가지 설정들(사이트아이디, 알러트없이곧바로로그인팝업, 로그인후리다이렉트, 로그아웃후리다이렉트, 알러트없이곧바로로그아웃)
 SITE_ID = 1
 ACCOUNT_LOGIN_ON_GET = True
 LOGIN_REDIRECT_URL = 'carts/'
 ACCOUNT_LOGOUT_REDIRECT_URL = ''
 ACCOUNT_LOGOUT_ON_GET = True
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS = True
