@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView
 )
 
-from users.serializers import CustomTokenObtainPairSerializer, UserSerializer, UserProfileSerializer
+from users.serializers import CustomTokenObtainPairSerializer, UserSerializer, UserProfileSerializer,UserProfileProductSerializer, UserProfileReviewSerializer, UserProfileWishSerializer
 from rest_framework.generics import get_object_or_404
 from users.models import User
 
@@ -59,6 +59,26 @@ class ProfileView(APIView):
 
         return Response(serializer.data)
 
+class ProfileProductView(APIView):
+    def get(self, request, pk):
+        user = get_object_or_404(User, id=pk)
+        serializer = UserProfileProductSerializer(user)
+
+        return Response(serializer.data)
+
+class ProfileWishView(APIView):
+    def get(self, request, pk):
+        user = get_object_or_404(User, id=pk)
+        serializer = UserProfileWishSerializer(user)
+
+        return Response(serializer.data)
+
+class ProfileReviewView(APIView):
+    def get(self, request, pk):
+        user = get_object_or_404(User, id=pk)
+        serializer = UserProfileReviewSerializer(user)
+
+        return Response(serializer.data)
 
 # 카카오로그인
 # class KakaoLoginView(APIView):
