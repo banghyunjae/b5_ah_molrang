@@ -7,17 +7,16 @@ User = get_user_model()
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='carts'
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart'
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    items = models.ManyToManyField(Product, through='CartItem')
 
     def __str__(self):
-        return f"{self.user.username}'의 장바구니"
+        return f"{self.user.username}'s 장바구니"
 
     def total(self):
-        return sum(item.subtotal() for item in self.items.all())
+        return sum(item.subtotal() for item in self.cart_items.all())
 
 
 class CartItem(models.Model):
@@ -26,9 +25,10 @@ class CartItem(models.Model):
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    is_selected = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.product.product} - {self.quantity}"
+        return self.product.name
 
     def subtotal(self):
         return self.product.price * self.quantity

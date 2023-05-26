@@ -22,3 +22,17 @@ class IsCartOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user
+
+
+class IsOwnerOrAdmin(permissions.BasePermission):
+    """
+    Custom permission to only allow owners or admin users to access and modify the cart or cart item.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Admin users have full access
+        if request.user.is_staff or request.user.is_superuser:
+            return True
+
+        # Only the owner of the cart or cart item can access and modify it
+        return obj.user == request.user
