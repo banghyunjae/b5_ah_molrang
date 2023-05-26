@@ -25,7 +25,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.writer.username
 
     def get_price(self, obj):
-        return f"₩{obj.price}"
+        return f"{obj.price}"
 
     class Meta:
         model = Product
