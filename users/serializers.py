@@ -30,15 +30,40 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['username'] = user.username
+        token['is_admin'] = user.is_admin
 
         return token
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    product_set = ProductListSerializer(many=True) # 작성한 물품 불러오기
-    review_set = ReviewListSerializer(many= True) # 내가 쓴 리뷰 불러오기
-    wishes = WishListSerializer(many= True)  # 찜한 상품 불러오기
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    product_set = ProductListSerializer(many=True)  # 작성한 물품 불러오기
+    review_set = ReviewListSerializer(many=True)  # 내가 쓴 리뷰 불러오기
+    wishes = WishListSerializer(many=True)  # 찜한 상품 불러오기
 
     class Meta:
         model = User
-        fields = ("id", "email","product_set", "wishes", "review_set")
+        fields = ("id", "email", "product_set", "wishes", "review_set")
+
+
+class UserProfileProductSerializer(serializers.ModelSerializer):
+    product_set = ProductListSerializer(many=True)  # 작성한 물품 불러오기
+
+    class Meta:
+        model = User
+        fields = ("id", "email", "product_set",)
+
+
+class UserProfileReviewSerializer(serializers.ModelSerializer):
+    review_set = ReviewListSerializer(many=True)  # 내가 쓴 리뷰 불러오기
+
+    class Meta:
+        model = User
+        fields = ("id", "email", "review_set")
+
+
+class UserProfileWishSerializer(serializers.ModelSerializer):
+    wishes = WishListSerializer(many=True)  # 찜한 상품 불러오기
+
+    class Meta:
+        model = User
+        fields = ("id", "email", "wishes",)
