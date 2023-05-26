@@ -7,6 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     updated_at = serializers.SerializerMethodField()
     inventory_status = serializers.SerializerMethodField()
     writer = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     def get_created_at(self, obj):
         return obj.created_at.strftime("%Y년 %m월 %d일 %p %I:%M")
@@ -22,6 +23,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_writer(self, obj):
         return obj.writer.username
+
+    def get_price(self, obj):
+        return f"₩{obj.price}"
 
     class Meta:
         model = Product
