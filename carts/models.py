@@ -28,7 +28,7 @@ class CartItem(models.Model):
     is_selected = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.product.name
+        return self.product.product
 
     def subtotal(self):
         return self.product.price * self.quantity
