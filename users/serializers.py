@@ -30,13 +30,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['username'] = user.username
+        token['is_admin'] = user.is_admin
 
         return token
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    review_set = ReviewListSerializer(many= True) # 내가 쓴 리뷰 불러오기
-    wishes = WishListSerializer(many= True)  # 찜한 상품 불러오기
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    review_set = ReviewListSerializer(many=True)  # 내가 쓴 리뷰 불러오기
+    wishes = WishListSerializer(many=True)  # 찜한 상품 불러오기
 
     class Meta:
         model = User
