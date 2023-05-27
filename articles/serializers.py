@@ -32,7 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProductCreateSerializer(serializers.ModelSerializer):
+class ProductCreateSerializer(ProductSerializer):
     writer = serializers.ReadOnlyField(source="writer.username")
 
     class Meta:
@@ -42,6 +42,23 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+    updated_at = serializers.SerializerMethodField()
+    writer = serializers.SerializerMethodField()
+    product = serializers.SerializerMethodField()
+
+    def get_created_at(self, obj):
+        return obj.created_at.strftime("%Y년 %m월 %d일 %p %I:%M")
+
+    def get_updated_at(self, obj):
+        return obj.updated_at.strftime("%Y년 %m월 %d일 %p %I:%M")
+
+    def get_writer(self, obj):
+        return obj.writer.username
+
+    def get_product(self, obj):
+        return obj.product.product
+
     class Meta:
         model = Review
         fields = [
