@@ -99,3 +99,18 @@ class ReviewListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ("product", "title", "writer", "content", "updated_at",)
+
+class ProductListSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source="writer.username")
+
+    class Meta:
+        model = Product
+        fields = (
+            "id",
+            "product",
+            "writer",
+            "image",
+            "updated_at",
+            "price",
+            "total_quantity",
+        )
