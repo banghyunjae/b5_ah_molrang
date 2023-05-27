@@ -25,12 +25,17 @@ class ProductView(APIView):
 
     # 상품 등록
     def post(self, request):
-        print(request.data)
-        serializer = ProductCreateSerializer(data=request.data)
+        if request.data['image'] == 'undefined':
+            data = request.data.copy()
+            data['image'] = ''
+            serializer = ProductCreateSerializer(data=data)
+        else:
+            serializer = ProductCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(writer=request.user)
+            serializer.save(writer_id=request.user.id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
+            print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -75,7 +80,8 @@ class ProductDetailView(APIView):
 
 class ReviewView(APIView):
     def get(self, request, id_product):
-        reviews = Review.objects.filter(product_id=id_product)
+        reviews = Review.objects.filter(
+            product_id=id_product).order_by("-created_at")
         paginator = PageNumberPagination()
         paginator.page_size = 10
         paginated_reviews = paginator.paginate_queryset(reviews, request)
@@ -85,9 +91,10 @@ class ReviewView(APIView):
     # 등록
     def post(self, request, id_product):
         serializer = ReviewCreateSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(product_id=id_product, writer=request.user)
+        if serializer.is_valid():
+            serializer.save(product_id=id_product, writer_id=request.user.id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
