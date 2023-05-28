@@ -25,6 +25,7 @@ class ProductView(APIView):
 
     # 상품 등록
     def post(self, request):
+        # 이미지가 없다면
         if request.data['image'] == 'undefined':
             data = request.data.copy()
             data['image'] = ''
