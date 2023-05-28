@@ -36,7 +36,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    product_set = ProductListSerializer(many=True)  # 작성한 물품 불러오기
     review_set = ReviewListSerializer(many=True)  # 내가 쓴 리뷰 불러오기
     wishes = WishListSerializer(many=True)  # 찜한 상품 불러오기
 

@@ -25,7 +25,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.writer.username
 
     def get_price(self, obj):
-        return f"{obj.price}"
+        return obj.price
 
     class Meta:
         model = Product
@@ -40,8 +40,28 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         fields = ("product", "content", "price",
                   "writer", "image", "total_quantity")
 
+    def create(self, validated_data):
+        return super().create(validated_data)
+
 
 class ReviewSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+    updated_at = serializers.SerializerMethodField()
+    writer = serializers.SerializerMethodField()
+    product = serializers.SerializerMethodField()
+
+    def get_created_at(self, obj):
+        return obj.created_at.strftime("%Y년 %m월 %d일 %p %I:%M")
+
+    def get_updated_at(self, obj):
+        return obj.updated_at.strftime("%Y년 %m월 %d일 %p %I:%M")
+
+    def get_writer(self, obj):
+        return obj.writer.username
+
+    def get_product(self, obj):
+        return obj.product.product
+
     class Meta:
         model = Review
         fields = [
@@ -82,6 +102,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ("product", "title", "writer", "content", "updated_at",)
+
 
 class ProductListSerializer(serializers.ModelSerializer):
     writer = serializers.ReadOnlyField(source="writer.username")
