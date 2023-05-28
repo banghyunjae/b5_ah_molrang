@@ -4,12 +4,19 @@ from articles.serializers import ProductSerializer
 
 
 class CartSerializer(serializers.ModelSerializer):
+    """
+    카트 모델의 직렬화를 담당하는 클래스입니다.
+    """
+
     class Meta:
         model = Cart
         fields = '__all__'
 
 
 class CartItemSerializer(serializers.ModelSerializer):
+    """
+    카트 아이템 모델의 직렬화를 담당하는 클래스입니다.
+    """
     product = ProductSerializer()
     price = serializers.SerializerMethodField()
     content = serializers.SerializerMethodField()
@@ -31,6 +38,9 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class CartItemListSerializer(serializers.ModelSerializer):
+    """
+    카트 아이템 목록의 직렬화를 담당하는 클래스입니다.
+    """
     class Meta:
         model = CartItem
         fields = ['product', 'quantity']
