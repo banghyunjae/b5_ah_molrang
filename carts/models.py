@@ -26,7 +26,7 @@ class CartItem(models.Model):
     """
     장바구니 안에 들어갈 상품 모델
     """
-    cart = models.ForeignKey(  # 해당 상품이 속한 장바구니
+    cart = models.ForeignKey(  # 상품이 속한 장바구니
         Cart, on_delete=models.CASCADE, related_name='cart_items'
     )
     product = models.ForeignKey(
@@ -38,5 +38,5 @@ class CartItem(models.Model):
     def __str__(self):
         return self.product.product
 
-    def subtotal(self):  # 해당 상품의 소계 가격을 계산
+    def subtotal(self):  # 상품의 가격을 계산
         return self.product.price * self.quantity
